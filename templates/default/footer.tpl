@@ -1,0 +1,3 @@
+{*Smarty*}
+ </body>
+</html>
