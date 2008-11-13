@@ -1,0 +1,8 @@
+Theme Name: Bytetips
+Theme URI: http://www.bytetips.com/wordpress-theme-bytetips/
+Description: Bytetips 3 colum Wordpress theme designed by Jim at <a href="http://www.bytetips.com">Bytetips</a>. Replace header.jpg with your Logo And have fun.<p>The CSS, XHTML and design is released under a <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a></p>
+Author: Jim
+Author URI: http://www.bytetips.com
+Tags: simple, Dark, Blue, Three Columns
+version: 1.6
+Change: Adding Pagination in the theme,Fixed some Css Issues, Removed Dotted Border and fixed some other Problems.
