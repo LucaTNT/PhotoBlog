@@ -31,7 +31,7 @@ $PhotoBlog = new PhotoBlog();
 
 // Include Smarty Template Engine and initialize it
 if(!@include('includes/Smarty/Smarty.class.php')){
-	die('PhotoBlog: FATAL ERROR: Unable to include "includes/const.inc.php", check your installation');
+	$PhotoBlog->fatal_error('Unable to include "includes/const.inc.php", check your installation');
 }
 
 // Inizialize Smarty and set work directories
@@ -56,12 +56,13 @@ if(!@include('modules/'.basename($PhotoBlog->module).'.mod.php')){
 header('Content-Type: text/html;charset='.$PhotoBlog->get_config_value('charset'));
 
 // Tell Smarty some information about its template...
-$template = array('path_www'      => '',
-                  'path_absolute' => BASEPATH.'/templates/'.$PhotoBlog->template_dir.'/');
+$template = array('path_www'      => $PhotoBlog->get_config_value('photoblog_url').'templates/'.$PhotoBlog->template_dir,
+                  'path_absolute' => BASEPATH.'/templates/'.$PhotoBlog->template_dir);
 $smarty->assign('template', $template);
 
 // ...PhotoBlog...
-$photoblog_smarty = array('rss_feed_url' => 'feed.rss');
+$photoblog_smarty = array('rss_feed_url' => 'feed.rss',
+                          'home_url'     => $PhotoBlog->get_config_value('photoblog_url'));
 $smarty->assign('PhotoBlog', $photoblog_smarty);
 
 // ... and the page

@@ -9,7 +9,17 @@
   <meta name="keywords" content="{$page.keywords}" />
   <meta name="author" content="{$page.author}" />
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$PhotoBlog.rss_feed_url}" />
-  <link rel='stylesheet' href='{$template.path_www}/style.css' type='text/css' />
+  <link rel='stylesheet' href='{$PhotoBlog.home_url}style.css.php' type='text/css' />
  </head>
  <body>
+  <div id="container">
+   <div id="header">
+    <h1><a href="<?php echo get_settings('home'); ?>/"><?php bloginfo('name'); ?></a></h1>
+    <h2><?php bloginfo('description'); ?></h2>
+   </div>
+   <div id="menu">
+    <ul>
+     <li class="current_page_item"><a href="{$PhotoBlog.home_url}" title="Home">Home</a></li>
+    </ul>
+   </div>
 
