@@ -17,4 +17,5 @@ define('PHOTOBLOG_VERSION', '0.1');
 
 // Define table names
 define('CONFIG_TABLE', MYSQL_TABLE_PREFIX.'config');
+define('PLUGIN_TABLE', MYSQL_TABLE_PREFIX.'plugin');
 ?>

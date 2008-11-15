@@ -89,7 +89,6 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 #header h1{
 	font-family: palatino linotype, georgia, arial, times;
 	font-size: 1.5em;
-	font-weight: 300px;
 	letter-spacing: 1px;
 	margin: 0;	
 	padding: 40px 0 0 600px;	
@@ -482,9 +481,6 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 	background-color: #f3f3f3;
 	padding-top: 4px;
 	margin: 10px;
-	-moz-border-radius: 3px;
-	-khtml-border-radius: 3px;
-	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
 

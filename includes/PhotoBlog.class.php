@@ -16,10 +16,10 @@ if(!defined('_IN_PHOTOBLOG_')){
 class PhotoBlog{
 	// Variables
 	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator;
-	private $time_start, $tpl_file, $cache;
+	private $time_start, $tpl_file, $cache, $hook_actions;
 
 	// Class constructor
-	function __construct($no_mysql = 0){
+	function __construct($no_mysql = 0, $safe_mode = 0){
 		// Store microtime at class initialization to calculate page generation time
 		$this->time_start = $this->get_time();
 		
@@ -32,6 +32,13 @@ class PhotoBlog{
 		$this->check_permissions();
 		$this->get_language();
 		$this->get_template();
+		
+		// If $safe_mode is set to 1 plugins aren't loaded
+		if($safe_mode == 0){
+			$this->load_plugins();
+		}
+		
+		// Parse the URL to find out what we have to do
 		$this->parse_url();
 		
 		$this->page_keywords = 'PhotoBlog, PHP, MySQL, photoblogging, free software, open source';
@@ -200,6 +207,52 @@ class PhotoBlog{
 		              'generator'   => $this->page_generator,
 		              'make_time'   => $this->make_time());
 		$smarty->assign('page', $page);
+	}
+	
+	// Executes a hook
+	function hook($hook){
+		if(isset($GLOBALS['hook_actions'][$hook])){
+			foreach($GLOBALS['hook_actions'][$hook] as $function){
+				$function();
+			}
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	// Adds a function to be executed at a hook
+	function add_action_to_hook($hook, $function){
+		$GLOBALS['hook_actions'][$hook][] = $function;
+		return true;
+	}
+	
+	// Activates a plugin
+	function activate_plugin($plugin_filename){
+		if(@include(BASENAME.'/plugins/'.$plugin_filename)){
+			add_hook_actions(&$this);
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	// Activates all enabled plugins
+	function load_plugins(){
+		$q_plugins = mysql_query('SELECT filename FROM '.PLUGIN_TABLE." WHERE enabled='1'");
+		while($plugin = mysql_fetch_row($q_plugins)){
+			list($plugin_filename) = $plugin;
+			if(@include(BASEPATH.'/plugins/'.$plugin_filename)){
+				add_hook_actions(&$this);
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
+	function say_yeah($what = ''){
+		echo 'yeah '.$what;
 	}
 }
 ?>

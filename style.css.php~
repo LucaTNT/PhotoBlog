@@ -38,9 +38,6 @@ $smarty = new Smarty;
 $smarty->template_dir = BASEPATH.'/templates/'.$PhotoBlog->template_dir;
 $smarty->compile_dir = BASEPATH.'/includes/writable/template_c/'.$PhotoBlog->template_dir;
 
-// Forces debug to be off
-$smarty->debugging = false;
-
 // Inform the browser that this is a CSS file
 header('Content-type: text/css');
 

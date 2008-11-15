@@ -23,4 +23,4 @@
      <li class="current_page_item"><a href="{$PhotoBlog.home_url}" title="Home">Home</a></li>
     </ul>
    </div>
-
+   <!-- End of common header -->
