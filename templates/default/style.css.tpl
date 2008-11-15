@@ -80,7 +80,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 /* header */
 
 #header {
-	background: #454D4E url({/literal}{$template.path_www}{literal}/images/head.png) 0 0 no-repeat;
+	background: #454D4E url({/literal}{$template.path_www}{literal}/images/head.jpg) 0 0 no-repeat;
         width: 100%; 
         height: 131px;
         color: #fff;
@@ -502,3 +502,4 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 }
 
 
+{/literal}
