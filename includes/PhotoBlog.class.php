@@ -16,7 +16,7 @@ if(!defined('_IN_PHOTOBLOG_')){
 class PhotoBlog{
 	// Variables
 	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator;
-	private $time_start, $tpl_file;
+	private $time_start, $tpl_file, $cache;
 
 	// Class constructor
 	function __construct($no_mysql = 0){
@@ -145,17 +145,17 @@ class PhotoBlog{
 	
 	// Gets the value of a setting in the config table, and use cache if present
 	function get_config_value($option, $fresh = 0){
-		if(!isset($_SESSION['cache']['config'][$option]) || $fresh == 1){
+		if(!isset($this->cache['config'][$option]) || $fresh == 1){
 			$cfg = mysql_escape_string($option);
 			$q_value = mysql_query('SELECT config_value FROM '.CONFIG_TABLE." WHERE config_name='$cfg'");
 			if(mysql_num_rows($q_value) == 1){
 				list($value) = mysql_fetch_row($q_value);
-				return $_SESSION['cache']['config'][$option] = $value;
+				return $this->cache['config'][$option] = $value;
 			}else{
 				return false;
 			}
 		}else{
-			return $_SESSION['cache']['config'][$option];
+			return $this->cache['config'][$option];
 		}
 	}
 	
@@ -178,22 +178,27 @@ class PhotoBlog{
 	function tell_smarty($smarty){
 		// Tell Smarty some information about its template...
 		$template = array('path_www'      => $this->get_config_value('photoblog_url').'templates/'.$this->template_dir,
-				'path_absolute' => BASEPATH.'/templates/'.$this->template_dir);
+		                  'path_absolute' => BASEPATH.'/templates/'.$this->template_dir);
 		$smarty->assign('template', $template);
 
 		// ...PhotoBlog...
-		$photoblog_smarty = array('rss_feed_url' => 'feed.rss',
-					'home_url'     => $this->get_config_value('photoblog_url'));
+		$photoblog_smarty = array('rss_feed_url'          => 'feed.rss',
+		                          'rss_feed_comments_url' => 'comments-feed.rss',
+		                          'home_url'              => $this->get_config_value('photoblog_url'),
+		                          'site_name'             => $this->get_config_value('site_name'),
+		                          'site_description'      => $this->get_config_value('site_description'),
+		                          'PhotoBlog_site_url'    => 'http://photoblog.tuttoeniente.net/',
+		                          'show_generation_time'  => $this->get_config_value('show_generation_time'));
 		$smarty->assign('PhotoBlog', $photoblog_smarty);
 
 		// ... and the page
 		$page = array('encoding'    => $this->get_config_value('charset'),
-			'title'       => $this->page_title,
-			'description' => $this->page_description,
-			'keywords'    => $this->page_keywords,
-			'author'      => $this->page_author,
-			'generator'   => $this->page_generator,
-			'make_time'   => $this->make_time());
+		              'title'       => $this->page_title,
+			      'description' => $this->page_description,
+		              'keywords'    => $this->page_keywords,
+		              'author'      => $this->page_author,
+		              'generator'   => $this->page_generator,
+		              'make_time'   => $this->make_time());
 		$smarty->assign('page', $page);
 	}
 }

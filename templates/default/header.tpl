@@ -8,14 +8,15 @@
   <meta name="description" content="{$page.description}" />
   <meta name="keywords" content="{$page.keywords}" />
   <meta name="author" content="{$page.author}" />
+  <meta name="generator" content="{$page.generator}" />
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$PhotoBlog.rss_feed_url}" />
   <link rel='stylesheet' href='{$PhotoBlog.home_url}style.css.php' type='text/css' />
  </head>
  <body>
   <div id="container">
    <div id="header">
-    <h1><a href="<?php echo get_settings('home'); ?>/"><?php bloginfo('name'); ?></a></h1>
-    <h2><?php bloginfo('description'); ?></h2>
+    <h1><a href="{$PhotoBlog.home_url}">{$PhotoBlog.site_name}</a></h1>
+    <h2>{$PhotoBlog.site_description}</h2>
    </div>
    <div id="menu">
     <ul>
