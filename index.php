@@ -55,25 +55,8 @@ if(!@include('modules/'.basename($PhotoBlog->module).'.mod.php')){
 // Send page encoding to the browser
 header('Content-Type: text/html;charset='.$PhotoBlog->get_config_value('charset'));
 
-// Tell Smarty some information about its template...
-$template = array('path_www'      => $PhotoBlog->get_config_value('photoblog_url').'templates/'.$PhotoBlog->template_dir,
-                  'path_absolute' => BASEPATH.'/templates/'.$PhotoBlog->template_dir);
-$smarty->assign('template', $template);
-
-// ...PhotoBlog...
-$photoblog_smarty = array('rss_feed_url' => 'feed.rss',
-                          'home_url'     => $PhotoBlog->get_config_value('photoblog_url'));
-$smarty->assign('PhotoBlog', $photoblog_smarty);
-
-// ... and the page
-$page = array('encoding'    => $PhotoBlog->get_config_value('charset'),
-              'title'       => $PhotoBlog->page_title,
-	      'description' => $PhotoBlog->page_description,
-	      'keywords'    => $PhotoBlog->page_keywords,
-	      'author'      => $PhotoBlog->page_author,
-	      'generator'   => $PhotoBlog->page_generator,
-	      'make_time'   => $PhotoBlog->make_time());
-$smarty->assign('page', $page);
+// Tell Smarty some info about the template, PhotoBlog and the page
+$PhotoBlog->tell_smarty($smarty);
 
 // Display Smarty's work
 $smarty->display($PhotoBlog->get_tpl());

@@ -38,8 +38,14 @@ $smarty = new Smarty;
 $smarty->template_dir = BASEPATH.'/templates/'.$PhotoBlog->template_dir;
 $smarty->compile_dir = BASEPATH.'/includes/writable/template_c/'.$PhotoBlog->template_dir;
 
+// Inform the browser that this is a CSS file
+header('Content-type: text/css');
+
 // Set the CSS file as template
 $PhotoBlog->set_tpl('style.css');
+
+// Tell Smarty some info about the template, PhotoBlog and the page
+$PhotoBlog->tell_smarty($smarty);
 
 // Display it
 $smarty->display($PhotoBlog->get_tpl());

@@ -173,5 +173,28 @@ class PhotoBlog{
 			return false;
 		}
 	}
+	
+	// Set some template-related variables in Smarty, whose object has to be passed to tell_smarty()
+	function tell_smarty($smarty){
+		// Tell Smarty some information about its template...
+		$template = array('path_www'      => $this->get_config_value('photoblog_url').'templates/'.$this->template_dir,
+				'path_absolute' => BASEPATH.'/templates/'.$this->template_dir);
+		$smarty->assign('template', $template);
+
+		// ...PhotoBlog...
+		$photoblog_smarty = array('rss_feed_url' => 'feed.rss',
+					'home_url'     => $this->get_config_value('photoblog_url'));
+		$smarty->assign('PhotoBlog', $photoblog_smarty);
+
+		// ... and the page
+		$page = array('encoding'    => $this->get_config_value('charset'),
+			'title'       => $this->page_title,
+			'description' => $this->page_description,
+			'keywords'    => $this->page_keywords,
+			'author'      => $this->page_author,
+			'generator'   => $this->page_generator,
+			'make_time'   => $this->make_time());
+		$smarty->assign('page', $page);
+	}
 }
 ?>
