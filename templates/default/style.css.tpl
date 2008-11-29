@@ -148,6 +148,9 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	color:#fff;
 }
 
+#main {
+	padding: 5px;
+}
 
 
 /* content */
@@ -283,10 +286,12 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	font-family: verdana, arial, tahoma;
 	font-size:8pt;
 	width: 20%;
+	height: 100%;
 	float:right;
-	margin: 12px 0 24px 0;
+	margin: 5px 0 50px 0;
 	padding: 0;
-	}
+	border: 1px solid black;
+}
 
 #right h2{
 	font-family: verdana, times, georgia;
@@ -482,6 +487,7 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 	padding-top: 4px;
 	margin: 10px;
 	border-radius: 3px;
+	width: 75%;
 }
 
 .wp-caption img {

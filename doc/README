@@ -11,4 +11,22 @@ DOCUMENTAZIONE IN ORDINE SPARSO DI PHOTOBLOG
 3. OTTENERE IL VALORE DI UN'IMPOSTAZIONE NELLA TABELLA DI CONFIGURAZIONE
    $PhotoBlog->get_config_value('impostazione-desiderata') 
 
+4. CREARE UN PLUGIN
+   Vedi il plugin di esempio dummy.php
+   Nota che con echo() si stampa nel template se l'hook è chiamato dal template
 
+5. HOOK
+   Gli hook sono "momenti" che vengono sfruttati dai plugin.
+   Ad esempio, si può definire un hook nella zona del footer della pagina, in tal caso si usa
+   l'apposita funzione che ho creato per Smarty:
+   {execute_plugin_hook hook="tpl_dummy"}
+   È sufficiente configurare il parametro hook con il nome dell'hook desiderato.
+   È buona norma aggiungere il prefisso tpl_ per gli hook definiti dal template.
+   
+5. REGISTRARE UNA FUNZIONE DI UN PLUGIN PER UN DETERMINATO HOOK
+   Ogni plugin ha la funzione add_hook_actions(), che viene chiamata se questo è abilitato.
+   In essa bisogna registrare le funzioni del plugin con la chiamata
+   $PhotoBlog->add_action_to_hook('NOME-HOOK', 'FUNZIONE-DA-ESEGUIRE');
+   È fortemente raccomandato di preporre il prefisso NOME-PLUGIN___ al nome della funzione.
+   Ad esempio, la funzione scan() del plugin testplugin si chiamerà testplugin____scan()
+   

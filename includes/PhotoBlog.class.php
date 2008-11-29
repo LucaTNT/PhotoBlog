@@ -15,7 +15,7 @@ if(!defined('_IN_PHOTOBLOG_')){
 
 class PhotoBlog{
 	// Variables
-	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator;
+	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator, $site_url;
 	private $time_start, $tpl_file, $cache, $hook_actions;
 
 	// Class constructor
@@ -44,6 +44,7 @@ class PhotoBlog{
 		$this->page_keywords = 'PhotoBlog, PHP, MySQL, photoblogging, free software, open source';
 		$this->page_generator = 'PhotoBlog '.PHOTOBLOG_VERSION;
 		
+		$this->site_url = 'http://'.$_SERVER['HTTP_HOST'].$this->get_root();
 	}
 	
 	// Gets microtime, useful for page generation time
@@ -180,11 +181,16 @@ class PhotoBlog{
 			return false;
 		}
 	}
+
+	// This gets the root of this PhotoBlog installation (not in the filesystem, but in the webserver)
+	function get_root(){
+		return ereg_replace('([a-zA-Z0-9\.]*)\.php', '', $_SERVER['SCRIPT_NAME']);
+	}
 	
 	// Set some template-related variables in Smarty, whose object has to be passed to tell_smarty()
 	function tell_smarty($smarty){
 		// Tell Smarty some information about its template...
-		$template = array('path_www'      => $this->get_config_value('photoblog_url').'templates/'.$this->template_dir,
+		$template = array('path_www'      => $this->site_url.'templates/'.$this->template_dir,
 		                  'path_absolute' => BASEPATH.'/templates/'.$this->template_dir);
 		$smarty->assign('template', $template);
 
