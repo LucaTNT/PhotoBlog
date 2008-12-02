@@ -77,6 +77,11 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	border: 1px solid #333;
 	}
 	
+.row {
+	display: table-row;
+	height: 100%;
+}
+	
 /* header */
 
 #header {
@@ -150,6 +155,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 #main {
 	padding: 5px;
+	display: table-cell;
 }
 
 
@@ -282,15 +288,19 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 /* right sidebar */
 
+
 #right{
 	font-family: verdana, arial, tahoma;
 	font-size:8pt;
 	width: 20%;
 	height: 100%;
-	float:right;
-	margin: 5px 0 50px 0;
-	padding: 0;
-	border: 1px solid black;
+	float: right;
+	margin: 0px 0 0px 0px;
+	padding-left: 25px;
+	display: table-cell;
+	background: url({/literal}{$template.path_www}{literal}/images/right-fade.png) left repeat-y;
+	background-color: #454D4E;
+	color: #fff;
 }
 
 #right h2{
