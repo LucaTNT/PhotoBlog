@@ -197,7 +197,7 @@ class PhotoBlog{
 		// ...PhotoBlog...
 		$photoblog_smarty = array('rss_feed_url'          => 'feed.rss',
 		                          'rss_feed_comments_url' => 'comments-feed.rss',
-		                          'home_url'              => $this->get_config_value('photoblog_url'),
+		                          'home_url'              => $this->site_url,
 		                          'site_name'             => $this->get_config_value('site_name'),
 		                          'site_description'      => $this->get_config_value('site_description'),
 		                          'PhotoBlog_site_url'    => 'http://photoblog.tuttoeniente.net/',
@@ -255,10 +255,6 @@ class PhotoBlog{
 				return false;
 			}
 		}
-	}
-	
-	function say_yeah($what = ''){
-		echo 'yeah '.$what;
 	}
 }
 ?>

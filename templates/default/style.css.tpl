@@ -36,7 +36,7 @@ img{ border: none; padding: 6px; }
 img a{border:none;}
 
 img.left{ float: left; border: none; padding: 6px; }
-img.right{ float: right; border: none; padding: 6px; }
+img#right{ float: right; border: none; padding: 6px; }
 
 blockquote{
 	border-left:1px solid #A5ABAB;
@@ -69,7 +69,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 
 #container {
-	width: 100%;
+	width: 90%;
 	margin: 0 auto;
 	padding: 0px;
 	background:#fff;
@@ -79,7 +79,6 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	
 .row {
 	display: table-row;
-	height: 100%;
 }
 	
 /* header */
@@ -89,6 +88,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
         width: 100%; 
         height: 131px;
         color: #fff;
+	margin-right: 100%;
         }
 
 #header h1{
@@ -96,7 +96,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	font-size: 1.5em;
 	letter-spacing: 1px;
 	margin: 0;	
-	padding: 40px 0 0 600px;	
+	padding: 40px 0 0 600px;
 	}
 	
 #header h1 a{color: #fff; text-decoration: none;}
@@ -110,8 +110,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 	font-style: italic;
 	color: #fff;
 	letter-spacing: 1px;
-	margin: 0;	
-	padding: 5px 0 0 600px;	
+	padding: 5px 0 0 600px;
 	}
 
 /* main menu */
@@ -156,6 +155,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 #main {
 	padding: 5px;
 	display: table-cell;
+	width: 80%;
 }
 
 
@@ -291,10 +291,8 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 #right{
 	font-family: verdana, arial, tahoma;
-	font-size:8pt;
+	font-size: 8pt;
 	width: 20%;
-	height: 100%;
-	float: right;
 	margin: 0px 0 0px 0px;
 	padding-left: 25px;
 	display: table-cell;
@@ -463,12 +461,13 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 #footer {
 	background: #333;
 	clear: both;
-	width: 100%;
-	margin-top:15px;
-	border-top:solid 2px #FFFFFF;
+	width: 90%;
+	margin-top: 10px;
+	border-top: solid 2px #FFFFFF;
 	font-family: verdana, arial, tahoma;
 	font-size: 7pt;
-	}
+	margin-left: 5%;
+}
 	
 #footer p{padding:6px;margin: 0; color: #eee;}
 #footer a{color: #FFFFFF;text-decoration: none;}
