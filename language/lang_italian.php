@@ -15,4 +15,7 @@ $lang['Comments'] = 'Commenti'; // Keep capital letter
 $lang['page_generated_in'] = 'Pagina generata in';
 $lang['seconds'] = 'secondi';
 $lang['powered_by'] = 'Powered by'; // Usually there's no need to translate this
+
+// Index.tpl
+$lang['no_posts'] = 'Non ci sono post';
 ?>

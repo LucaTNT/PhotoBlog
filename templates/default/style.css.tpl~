@@ -225,6 +225,9 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 .pagetitle {}
 
+.error {
+	padding-left: 1em;
+}
 
 #left {
 	font-family: verdana, arial, tahoma;
@@ -461,11 +464,12 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 #footer {
 	background: #333;
 	clear: both;
-	/*width: 90%;*/
+	width: 90%;
 	margin-top: 10px;
 	border-top: solid 2px #FFFFFF;
 	font-family: verdana, arial, tahoma;
 	font-size: 7pt;
+	margin-left: 5%;
 }
 	
 #footer p{padding:6px;margin: 0; color: #eee;}

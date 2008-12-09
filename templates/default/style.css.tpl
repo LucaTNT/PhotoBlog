@@ -225,6 +225,9 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 .pagetitle {}
 
+.error {
+	padding-left: 3em;
+}
 
 #left {
 	font-family: verdana, arial, tahoma;

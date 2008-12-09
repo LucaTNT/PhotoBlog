@@ -15,7 +15,7 @@ if(!defined('_IN_PHOTOBLOG_')){
 
 class PhotoBlog{
 	// Variables
-	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator, $site_url;
+	public $language, $template_dir, $module, $GET, $page_title, $page_description, $page_keywords, $page_author, $page_generator, $site_url, $pagination;
 	private $time_start, $tpl_file, $cache, $hook_actions;
 
 	// Class constructor
