@@ -256,5 +256,82 @@ class PhotoBlog{
 			}
 		}
 	}
+	
+	// Adds something to the cache
+	// $sub_id is needed for those arrays that might grow like posts: cache['posts']['post_id'] = array(ALL_POST_DATA)
+	function add_to_cache($index, $sub_id = '', $data){
+		// TODO: There is no check at all on this data, maybe we should
+		//       implement some kind of validation and/or security here
+		if(empty($sub_id)){
+			$this->cache[$index] = $data;
+		}else{
+			$this->cache[$index][$sub_id] = $data;
+		}
+		return true;
+	}
+	
+	//
+	// POST FUNCTIONS
+	// These functions deal with posts
+	//
+	
+	// Gets a post and saves it to cache, unless explicitly requested not to save it setting $nosave to 1
+	function post_get($post_id, $nosave = 0){
+		if(is_numeric($post_id)){
+			$post_id = mysql_escape_string($post_id);
+			$q_post = mysql_query('SELECT * FROM '.POSTS_TABLE." WHERE id='$post_id'");
+			if(mysql_num_rows($q_post) > 0){
+				$post = mysql_fetch_array($q_post);
+				if($nosave == 0){
+					$this->cache['posts'][$post_id] = $post;
+				}
+				return $post;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+	
+	// Generates the post's permalink according to the scheme saved in the DB
+	// See documentation for scheme explaination
+	function post_make_link($post_id){
+		if(is_numeric($post_id)){
+			if(!isset($this->cache['posts'][$post_id])){
+				$this->post_get($post_id);
+			}
+			$post = $this->cache['posts'][$post_id];
+			$scheme = $this->get_config_value('permalink_scheme');
+			$find = array('%date_year',
+			              '%date_month',
+				      '%date_day',
+				      '%date_hour',
+				      '%date_minute',
+				      '%date_second',
+				      '%post_title',
+				      '%post_id');
+			$replace = array(strftime('%Y', $post['date']),
+			                 strftime('%m', $post['date']),
+					 strftime('%d', $post['date']),
+					 strftime('%H', $post['date']),
+					 strftime('%i', $post['date']),
+					 strftime('%s', $post['date']),
+					 $this->post_string_for_permalink($post['title']),
+					 $post['id']);
+			$permalink = str_replace($find, $replace, $scheme);
+			return $this->site_url.$permalink;
+		}else{
+			return false;
+		}
+	}
+	
+	// Makes a string a suitable part of the permalink (i.e.: urlencode, no spaces...)
+	function post_string_for_permalink($string){
+		// TODO: accents and so on, needs a lot of work. Maybe should borrow from WordPress
+		$find    = array(' ', '_', '#', '.', ',', ':', ';', '*', '!', '?');
+		$replace = array('-', '',  '',  '',  '',  '',  '',  '',  '',  '');
+		return urlencode(str_replace($find, $replace, $string));
+	}
 }
 ?>

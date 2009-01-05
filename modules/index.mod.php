@@ -13,11 +13,19 @@ if(isset($PhotoBlog->pagination['page'])){
 $PhotoBlog->page_title = $PhotoBlog->get_config_value('site_name');
 
 
+// Prepare the array for the posts that will be passed to Smarty
+$posts = array();
 
 // Let's start: get the posts we need and process them
 $q_posts = mysql_query('SELECT * FROM '.POSTS_TABLE.' ORDER BY id DESC LIMIT '.$start.','.$posts_to_get);
 if(mysql_num_rows($q_posts) > 0){
-	$smarty->assign('no_posts', 1);
+	$smarty->assign('no_posts', 0);
+	while($post_to_add = mysql_fetch_array($q_posts)){
+		$PhotoBlog->add_to_cache('posts', $post_to_add['id'], $post_to_add);
+		$post_to_add['link'] = $PhotoBlog->post_make_link($post_to_add['id']);
+		$posts[] = $post_to_add;
+	}
+	$smarty->assign('posts', $posts);
 }else{
 	$smarty->assign('no_posts', 1);
 }
