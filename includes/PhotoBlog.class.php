@@ -201,7 +201,9 @@ class PhotoBlog{
 		                          'site_name'             => $this->get_config_value('site_name'),
 		                          'site_description'      => $this->get_config_value('site_description'),
 		                          'PhotoBlog_site_url'    => 'http://photoblog.tuttoeniente.net/',
-		                          'show_generation_time'  => $this->get_config_value('show_generation_time'));
+		                          'show_generation_time'  => $this->get_config_value('show_generation_time'),
+					  'date_format'           => $this->get_config_value('date_format'),
+					  'time_format'           => $this->get_config_value('time_format'));
 		$smarty->assign('PhotoBlog', $photoblog_smarty);
 
 		// ... and the page
@@ -332,6 +334,33 @@ class PhotoBlog{
 		$find    = array(' ', '_', '#', '.', ',', ':', ';', '*', '!', '?');
 		$replace = array('-', '',  '',  '',  '',  '',  '',  '',  '',  '');
 		return urlencode(str_replace($find, $replace, $string));
+	}
+	
+	// Parses the text and creates galleries when their code is found
+	function parse_post_text($text, $post_id = 0){
+		if(!empty($text)){
+			function pass_to_gallery($id){
+				$PhotoBlog = new PhotoBlog(1, 1);
+				$result = $PhotoBlog->make_gallery_for_index($id);
+				unset($PhotoBlog);
+				return $result;
+			}
+			$text = preg_replace('#\[GALLERY=([0-9]+)\]#eisU', "pass_to_gallery('$1');", $text);
+			$text = nl2br($text);
+			if($post_id != 0){
+				$post_id = mysql_escape_string($post_id);
+				$text_for_query = mysql_escape_string($text);
+				#mysql_query('UPDATE '.POSTS_TABLE." SET html='$text_for_query' WHERE id='$post_id'");
+			}
+			return $text;
+		}else{
+			return false;
+		}
+	}
+	
+	// Creates the HTML code of the gallery to be shown in the index
+	function make_gallery_for_index($gallery_id){
+		return '<div>HERE COMES GALLERY '.$gallery_id.'</div>';
 	}
 }
 ?>

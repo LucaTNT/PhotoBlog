@@ -23,6 +23,9 @@ if(mysql_num_rows($q_posts) > 0){
 	while($post_to_add = mysql_fetch_array($q_posts)){
 		$PhotoBlog->add_to_cache('posts', $post_to_add['id'], $post_to_add);
 		$post_to_add['link'] = $PhotoBlog->post_make_link($post_to_add['id']);
+		if(empty($post_to_add['html'])){
+			$post_to_add['html'] = $PhotoBlog->parse_post_text($post_to_add['text'], $post_to_add['id']);
+		}
 		$posts[] = $post_to_add;
 	}
 	$smarty->assign('posts', $posts);

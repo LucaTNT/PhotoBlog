@@ -7,10 +7,13 @@
       <h2>{$lang.no_posts}</h2>
      </div>
 {else}
-     There should be posts, but showing them is not yet implemented
 {section name=k loop=$posts}
      <div class="post">
       <h2><a href="{$posts[k].link}">{$posts[k].title}</a></h2>
+      <small>{$lang.posted} {$lang.date_prefix} {$posts[k].date|date_format:$PhotoBlog.date_format} {$lang.time_prefix} {$posts[k].date|date_format:$PhotoBlog.time_format}</small>
+      <div class="entry">
+       {$posts[k].html}
+      </div>
      </div>
 {/section}
 {/if}

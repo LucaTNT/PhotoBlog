@@ -18,4 +18,7 @@ $lang['powered_by'] = 'Powered by'; // Usually there's no need to translate this
 
 // Index.tpl
 $lang['no_posts'] = 'Non ci sono post';
+$lang['posted'] = 'Scritto';
+$lang['date_prefix'] = 'il'; // Prefix before a date, for example posted _ON_ June 16
+$lang['time_prefix'] = 'alle'; // Prefix before a date, for example posted AT 4:00 pm
 ?>

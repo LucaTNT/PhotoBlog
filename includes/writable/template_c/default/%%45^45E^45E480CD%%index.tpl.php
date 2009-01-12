@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.19, created on 2009-01-03 19:02:46
+<?php /* Smarty version 2.6.19, created on 2009-01-12 19:24:21
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('function', 'execute_plugin_hook', 'index.tpl', 23, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'date_format', 'index.tpl', 13, false),array('function', 'execute_plugin_hook', 'index.tpl', 26, false),)), $this); ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => ($this->_tpl_vars['template']['path_absolute'])."/header.tpl", 'smarty_include_vars' => array()));
 $this->_tpl_vars = $_smarty_tpl_vars;
@@ -15,7 +15,6 @@ unset($_smarty_tpl_vars);
 </h2>
      </div>
 <?php else: ?>
-     There should be posts, but showing them is not yet implemented
 <?php unset($this->_sections['k']);
 $this->_sections['k']['name'] = 'k';
 $this->_sections['k']['loop'] = is_array($_loop=$this->_tpl_vars['posts']) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
@@ -44,6 +43,16 @@ $this->_sections['k']['last']       = ($this->_sections['k']['iteration'] == $th
       <h2><a href="<?php echo $this->_tpl_vars['posts'][$this->_sections['k']['index']]['link']; ?>
 "><?php echo $this->_tpl_vars['posts'][$this->_sections['k']['index']]['title']; ?>
 </a></h2>
+      <small><?php echo $this->_tpl_vars['lang']['posted']; ?>
+ <?php echo $this->_tpl_vars['lang']['date_prefix']; ?>
+ <?php echo ((is_array($_tmp=$this->_tpl_vars['posts'][$this->_sections['k']['index']]['date'])) ? $this->_run_mod_handler('date_format', true, $_tmp, $this->_tpl_vars['PhotoBlog']['date_format']) : smarty_modifier_date_format($_tmp, $this->_tpl_vars['PhotoBlog']['date_format'])); ?>
+ <?php echo $this->_tpl_vars['lang']['time_prefix']; ?>
+ <?php echo ((is_array($_tmp=$this->_tpl_vars['posts'][$this->_sections['k']['index']]['date'])) ? $this->_run_mod_handler('date_format', true, $_tmp, $this->_tpl_vars['PhotoBlog']['time_format']) : smarty_modifier_date_format($_tmp, $this->_tpl_vars['PhotoBlog']['time_format'])); ?>
+</small>
+      <div class="entry">
+       <?php echo $this->_tpl_vars['posts'][$this->_sections['k']['index']]['html']; ?>
+
+      </div>
      </div>
 <?php endfor; endif; ?>
 <?php endif; ?>
