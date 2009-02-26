@@ -333,7 +333,7 @@ class PhotoBlog{
 		// TODO: accents and so on, needs a lot of work. Maybe should borrow from WordPress
 		$find    = array(' ', '_', '#', '.', ',', ':', ';', '*', '!', '?');
 		$replace = array('-', '',  '',  '',  '',  '',  '',  '',  '',  '');
-		return urlencode(str_replace($find, $replace, $string));
+		return urlencode(str_replace($find, $replace, strtolower($string)));
 	}
 	
 	// Parses the text and creates galleries when their code is found
@@ -345,8 +345,8 @@ class PhotoBlog{
 				unset($PhotoBlog);
 				return $result;
 			}
-			$text = preg_replace('#\[GALLERY=([0-9]+)\]#eisU', "pass_to_gallery('$1');", $text);
 			$text = nl2br($text);
+			$text = preg_replace('#\[GALLERY=([0-9]+)\]#eisU', "pass_to_gallery('$1');", $text);
 			if($post_id != 0){
 				$post_id = mysql_escape_string($post_id);
 				$text_for_query = mysql_escape_string($text);
@@ -360,7 +360,160 @@ class PhotoBlog{
 	
 	// Creates the HTML code of the gallery to be shown in the index
 	function make_gallery_for_index($gallery_id){
-		return '<div>HERE COMES GALLERY '.$gallery_id.'</div>';
+		global $smarty;
+		if($this->gallery_has_images($gallery_id)){
+			$images_number = $this->gallery_images_number($gallery_id);
+			$images = $this->gallery_get_images($gallery_id);
+			$cover_id = $this->gallery_get_cover($gallery_id);
+			$rows = $this->get_config_value('small_thumb_rows_in_index');
+			$cols = $this->get_config_value('small_thumb_per_row_in_index');
+			$thumb_number = $rows * $cols;
+			$images_number = $this->cache['galleries'][$gallery_id]['images_number'];
+			if($images_number <= $thumb_number){
+				$thumb_number = $images_number;
+			}
+			$images_for_smarty = array();
+			for($n = 0; $n < $thumb_number; $n++){
+				$images_for_smarty[] = $images[$n];
+			}
+			$smarty->assign(array('rows'          => $rows,
+			                      'cols'          => $cols,
+					      'thumb_number'  => $thumb_number,
+			                      'gallery_cover' => array('image_url' => $this->image_get_big_thumb_url($cover_id), 'image_link' => $this->image_get_link($cover_id)),
+			                      'images'        => $images_for_smarty));
+			
+			return $smarty->fetch('gallery_for_index.tpl');
+		}else{
+			return false;
+		}
+	}
+	
+	// Checks if a gallery exists in the DB (even with no images). It saves the gallery details in the cache.
+	function gallery_exist($gallery_id){
+		$gallery_id = mysql_escape_string($gallery_id);
+		if(isset($this->cache['galleries'][$gallery_id])){
+			return true;
+		}else{
+			$q_gallery = mysql_query('SELECT * FROM '.GALLERIES_TABLE." WHERE id='$gallery_id'");
+			if(mysql_num_rows($q_gallery) > 0){
+				$gallery = mysql_fetch_array($q_gallery);
+				$this->cache['galleries'][$gallery_id] = $gallery;
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
+	// Checks if a gallery has at least one image in it. If so, it saves a 'images_number' index in the cache.
+	function gallery_has_images($gallery_id){
+		if($this->gallery_exist($gallery_id)){
+			if(isset($this->cache['galleries'][$gallery_id]['images_number'])){
+				return true;
+			}else{
+				$gallery_id = mysql_escape_string($gallery_id);
+				$q_images = mysql_query('SELECT COUNT(id) FROM '.IMAGES_TABLE." WHERE gallery_id='$gallery_id'");
+				if(mysql_num_rows($q_images) > 0){
+					list($images_number) = mysql_fetch_row($q_images);
+					$this->cache['galleries'][$gallery_id]['images_number'] = $images_number;
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}else{
+			return false;
+		}
+	}
+	
+	// Gets the number of images in a gallery, returns it and saves it to the cache
+	function gallery_images_number($gallery_id){
+		if(isset($this->cache['galleries'][$gallery_id]['images_number'])){
+			return $this->cache['galleries'][$gallery_id]['images_number'];
+		}else{
+			if($this->gallery_has_images($gallery_id)){
+				return $this->cache['galleries'][$gallery_id]['images_number'];
+			}else{
+				return false;
+			}
+		}
+	}
+	
+	// Gets the images in the gallery and saves the array in the cache
+	function gallery_get_images($gallery_id){
+		if($this->gallery_has_images($gallery_id)){
+			$gallery_id = mysql_escape_string($gallery_id);
+			$q_images = mysql_query('SELECT * FROM '.IMAGES_TABLE." WHERE gallery_id='$gallery_id'");
+			while($image = mysql_fetch_array($q_images)){
+				if($image['gallery_cover'] == 1){
+					$this->cache['galleries'][$gallery_id]['cover'] = $image['id'];
+					$cover_found = 1;
+				}
+				$this->cache['galleries'][$gallery_id]['images'][] = $image;
+				$this->cache['images'][$image['id']] = $image;
+			}
+			if(!isset($cover_found)){
+				$this->cache['galleries'][$gallery_id]['cover'] = 0;
+			}
+			return $this->cache['galleries'][$gallery_id]['images'];
+		}else{
+			return false;
+		}
+	}
+	
+	// Gets the image to be used as album cover (through gallery_get_images)
+	function gallery_get_cover($gallery_id){
+		if(!isset($this->cache['galleries'][$gallery_id]['cover'])){
+			$this->gallery_get_images($gallery_id);
+		}
+		return $this->cache['galleries'][$gallery_id]['cover'];
+	}
+	
+	// Gets the details of an image and saves them into the cache
+	function image_get($image_id){
+		if(isset($this->cache['images'][$image_id])){
+			return $this->cache['images'][$image_id];
+		}else{
+			$image_id = mysql_escape_string($image_id);
+			$q_image = mysql_query('SELECT * FROM '.IMAGES_TABLE." WHERE id='$image_id'");
+			if(mysql_num_rows($q_image) > 0){
+				$image = mysql_fetch_array($q_image);
+				$this->cache['images'][$image_id] = $image;
+				return $image;
+			}else{
+				return false;
+			}
+		}
+	
+	}
+	
+	// Gets the small thumbnail URL
+	function image_get_small_thumb_url($image_id){
+		$image = $this->image_get($image_id);
+		$gallery_id = $image['gallery_id'];
+		$this->gallery_exist($gallery_id);
+		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
+		return $this->site_url.'thumbnails/'.$gallery_name.'/small/'.$image_id.'.'.$image['format'];
+	}
+	
+	// Gets the big thumbnail URL
+	function image_get_big_thumb_url($image_id){
+		$image = $this->image_get($image_id);
+		$gallery_id = $image['gallery_id'];
+		$this->gallery_exist($gallery_id);
+		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
+		$image_name = $this->post_string_for_permalink($this->cache['images'][$image_id]['caption']);
+		return $this->site_url.'thumbnails/'.$image_id.'/'.$gallery_name.'/big/'.$image_name.'.'.$image['filetype'];
+	}
+	
+	// Gets the link to see the big image
+	function image_get_link($image_id){
+		$image = $this->image_get($image_id);
+		$gallery_id = $image['gallery_id'];
+		$this->gallery_exist($gallery_id);
+		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
+		$image_name = $this->post_string_for_permalink($image['caption']);
+		return $this->site_url.'image-big/'.$image_id.'/'.$gallery_name.'/'.$image_name.'/';
 	}
 }
 ?>

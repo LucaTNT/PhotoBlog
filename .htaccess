@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	
+	## TUMBNAILS ##
+	# Big Thumbnail
+	# URL Format: thumbnails/IMAGE_ID/GALLERY_NAME/big/IMAGE_CAPTION.FORMAT
+	RewriteRule thumbnails/(.*)/(.*)/big/(.*) thumbnail.php?image_id=$1&size=big
+	
+	# Small Thumbnail
+	# Separated from the big thumb rule to reduce the probability of this being hacked
+	# URL Format: thumbnails/IMAGE_ID/GALLERY_NAME/small/IMAGE_CAPTION.FORMAT
+	RewriteRule thumbnails/(.*)/(.*)/small/(.*) thumbnail.php?image_id=$1&size=small
+	
+	
+	## GALLERIES ##
+	# TODO
+	
+</IfModule>

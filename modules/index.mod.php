@@ -1,4 +1,9 @@
 <?php
+// Die if called directly
+if(!defined('_IN_PHOTOBLOG_')){
+	die();
+}
+
 // We need to know how many posts per page we have to show
 $posts_to_get = $PhotoBlog->get_config_value('posts_per_page');
 
