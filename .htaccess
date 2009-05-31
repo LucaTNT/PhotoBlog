@@ -13,6 +13,8 @@
 	
 	
 	## GALLERIES ##
-	# TODO
+	# Big Image: shows the original image, but through a PHP file to enable advanced
+	# options such as watermark
+	RewriteRule image-big/([0-9]+)/(.*)/(.*) original.php?image_id=$1
 	
 </IfModule>

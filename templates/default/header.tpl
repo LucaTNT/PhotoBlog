@@ -9,8 +9,12 @@
   <meta name="keywords" content="{$page.keywords}" />
   <meta name="author" content="{$page.author}" />
   <meta name="generator" content="{$page.generator}" />
+  <script type="text/javascript" src="js/prototype.js"></script>
+  <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
+  <script type="text/javascript" src="js/lightbox.js"></script>
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$PhotoBlog.rss_feed_url}" />
   <link rel='stylesheet' href='{$PhotoBlog.home_url}style.css.php' type='text/css' />
+  <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
  </head>
  <body>
   <div id="container">

@@ -41,7 +41,7 @@ if($image_size != 'big' && $image_size != 'small'){
 
 // Function that outputs an image with just a 'NOT FOUND' text in it
 function image_not_found(){
-	// TODO
+	// TODO: HIGH
 }
 
 // Get details about the image
@@ -92,17 +92,21 @@ if(is_file($thumb_name) && is_readable($thumb_name)){
 	list($width, $height) = getimagesize($image['path']);
 	
 	// Get thumb size from DB
-	$size = $PhotoBlog->get_config_value('big_thumb_size');
+	if(isset($_GET['size']) && $_GET['size'] == 'small'){
+		$size = $PhotoBlog->get_config_value('small_thumb_size');
+	}else{
+		$size = $PhotoBlog->get_config_value('big_thumb_size');
+	}
 	
 	// Calculate new size
 	if($height < $width){
-		$new_width = $size;
+		$new_width = (int) $size;
 		$ratio = $height / $width;
-		$new_height = $new_width * $ratio;
+		$new_height = (int) $new_width * $ratio;
 	}else{
-		$new_height  = $size;
+		$new_height  = (int) $size;
 		$ratio = $width / $height;
-		$new_width = $new_height * $ratio;
+		$new_width = (int) $new_height * $ratio;
 	}
 	
 	// Create the thumbnail

@@ -10,7 +10,7 @@
 
 // Die if called directly
 if(!defined('_IN_PHOTOBLOG_')){
-	die();
+	#die();
 }
 
 class PhotoBlog{
@@ -134,7 +134,7 @@ class PhotoBlog{
 			$this->module = 'index';
 		}else{
 			$parse_str = explode('/', str_replace($_SERVER['SCRIPT_NAME'].'/', '', $_SERVER['REQUEST_URI']));
-			if(ereg('^[a-zA-Z]+$', $parse_str[0], $module)){
+			if(ereg('^[a-zA-Z\-]+$', $parse_str[0], $module)){
 				$this->module = strtolower($module[0]);
 			}
 			
@@ -350,6 +350,7 @@ class PhotoBlog{
 			if($post_id != 0){
 				$post_id = mysql_escape_string($post_id);
 				$text_for_query = mysql_escape_string($text);
+				// TODO: Enable this
 				#mysql_query('UPDATE '.POSTS_TABLE." SET html='$text_for_query' WHERE id='$post_id'");
 			}
 			return $text;
@@ -367,20 +368,37 @@ class PhotoBlog{
 			$cover_id = $this->gallery_get_cover($gallery_id);
 			$rows = $this->get_config_value('small_thumb_rows_in_index');
 			$cols = $this->get_config_value('small_thumb_per_row_in_index');
+			$current_col = 1;
 			$thumb_number = $rows * $cols;
 			$images_number = $this->cache['galleries'][$gallery_id]['images_number'];
 			if($images_number <= $thumb_number){
 				$thumb_number = $images_number;
 			}
+			
+			// Prepare images for Smarty
 			$images_for_smarty = array();
 			for($n = 0; $n < $thumb_number; $n++){
+				// Perform this check to tell smarty when he has to
+				// create a new line in our gallery
+				if($images[$n]['id'] != $cover_id){
+					if($current_col < $cols){
+						$current_col++;
+					}else{
+						$images[$n]['last_in_row'] = 1;
+					}
+				}
+				$images[$n]['image_link'] = $this->image_get_link($images[$n]['id']);
 				$images_for_smarty[] = $images[$n];
 			}
+			
+			// Assign variables to Smarty
 			$smarty->assign(array('rows'          => $rows,
 			                      'cols'          => $cols,
 					      'thumb_number'  => $thumb_number,
-			                      'gallery_cover' => array('image_url' => $this->image_get_big_thumb_url($cover_id), 'image_link' => $this->image_get_link($cover_id)),
-			                      'images'        => $images_for_smarty));
+			                      'gallery_cover' => array('image_url' => $this->image_get_big_thumb_url($cover_id), 'image_link' => $this->image_get_link($cover_id), 'description' => $cache['images'][$cover_id]['caption']),
+			                      'images'        => $images_for_smarty,
+					      'lightbox'      => $this->get_config_value('lightbox'),
+					      'gallery_id'    => $gallery_id));
 			
 			return $smarty->fetch('gallery_for_index.tpl');
 		}else{
@@ -449,6 +467,7 @@ class PhotoBlog{
 					$this->cache['galleries'][$gallery_id]['cover'] = $image['id'];
 					$cover_found = 1;
 				}
+				$image['small_thumb_url'] = $this->image_get_small_thumb_url($image['id']);
 				$this->cache['galleries'][$gallery_id]['images'][] = $image;
 				$this->cache['images'][$image['id']] = $image;
 			}
@@ -493,7 +512,7 @@ class PhotoBlog{
 		$gallery_id = $image['gallery_id'];
 		$this->gallery_exist($gallery_id);
 		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
-		return $this->site_url.'thumbnails/'.$gallery_name.'/small/'.$image_id.'.'.$image['format'];
+		return $this->site_url.'thumbnails/'.$image_id.'/'.$gallery_name.'/small/'.$image_name.'.'.$image['filetype'];
 	}
 	
 	// Gets the big thumbnail URL
