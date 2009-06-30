@@ -21,4 +21,5 @@ $lang['no_posts'] = 'No posts';
 $lang['posted'] = 'Posted';
 $lang['date_prefix'] = 'on'; // Prefix before a date, for example posted _ON_ June 16
 $lang['time_prefix'] = 'at'; // Prefix before a date, for example posted AT 4:00 pm
+$lang['go_to_gallery'] = 'Go to gallery';
 ?>

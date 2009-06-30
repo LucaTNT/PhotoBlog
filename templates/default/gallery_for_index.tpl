@@ -20,3 +20,7 @@
   {/if}
  {/if}
 {/section}
+
+{if $show_link_for_gallery == 1}
+<a href="{$gallery_link}">{$lang.go_to_gallery}</a>
+{/if}

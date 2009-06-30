@@ -363,16 +363,25 @@ class PhotoBlog{
 	function make_gallery_for_index($gallery_id){
 		global $smarty;
 		if($this->gallery_has_images($gallery_id)){
+			// Get the number of images in the gallery, the images themselves and determine the cover image
 			$images_number = $this->gallery_images_number($gallery_id);
 			$images = $this->gallery_get_images($gallery_id);
 			$cover_id = $this->gallery_get_cover($gallery_id);
+			// Retrive the number of rows and cols defined in config table
 			$rows = $this->get_config_value('small_thumb_rows_in_index');
 			$cols = $this->get_config_value('small_thumb_per_row_in_index');
 			$current_col = 1;
+			// Calculate the maximum number of thumbs to be shown
 			$thumb_number = $rows * $cols;
-			$images_number = $this->cache['galleries'][$gallery_id]['images_number'];
+			
+			// If the total number of images in the gallery is less than the maximum for the index page show them all (of course)
 			if($images_number <= $thumb_number){
 				$thumb_number = $images_number;
+				$show_link_for_gallery = 0;
+			}else{
+				// If the images in the gallery are more than the few we show, we must tell Smarty to show a link to the whole gallery
+				$smarty->assign('gallery_link', $this->gallery_get_link($gallery_id));
+				$show_link_for_gallery = 1;
 			}
 			
 			// Prepare images for Smarty
@@ -392,13 +401,14 @@ class PhotoBlog{
 			}
 			
 			// Assign variables to Smarty
-			$smarty->assign(array('rows'          => $rows,
-			                      'cols'          => $cols,
-					      'thumb_number'  => $thumb_number,
-			                      'gallery_cover' => array('image_url' => $this->image_get_big_thumb_url($cover_id), 'image_link' => $this->image_get_link($cover_id), 'description' => $cache['images'][$cover_id]['caption']),
-			                      'images'        => $images_for_smarty,
-					      'lightbox'      => $this->get_config_value('lightbox'),
-					      'gallery_id'    => $gallery_id));
+			$smarty->assign(array('rows'                  => $rows,
+			                      'cols'                  => $cols,
+					      'thumb_number'          => $thumb_number,
+			                      'gallery_cover'         => array('image_url' => $this->image_get_big_thumb_url($cover_id), 'image_link' => $this->image_get_link($cover_id), 'description' => $cache['images'][$cover_id]['caption']),
+			                      'images'                => $images_for_smarty,
+					      'lightbox'              => $this->get_config_value('lightbox'),
+					      'gallery_id'            => $gallery_id,
+					      'show_link_for_gallery' => $show_link_for_gallery));
 			
 			return $smarty->fetch('gallery_for_index.tpl');
 		}else{
@@ -488,22 +498,61 @@ class PhotoBlog{
 		return $this->cache['galleries'][$gallery_id]['cover'];
 	}
 	
-	// Gets the details of an image and saves them into the cache
-	function image_get($image_id){
-		if(isset($this->cache['images'][$image_id])){
-			return $this->cache['images'][$image_id];
+	function gallery_get_name($gallery_id){
+		$gallery_id = mysql_escape_string($gallery_id);
+		if($this->gallery_exist($gallery_id)){
+			return $this->cache['galleries'][$gallery_id]['name'];
 		}else{
-			$image_id = mysql_escape_string($image_id);
+			return false;
+		}
+	}
+	
+	// Get the link for the requested gallery
+	function gallery_get_link($gallery_id){
+		$gallery_id = mysql_escape_string($gallery_id);
+		if($this->gallery_exist($gallery_id)){
+			return $this->site_url.'gallery/'.$gallery_id.'/'.$this->post_string_for_permalink($this->gallery_get_name($gallery_id)).'/';
+		}else{
+			return false;
+		}
+	}
+	
+	// Checks if an image exists and, if so, inserts its details in the cache
+	function image_exist($image_id){
+		$image_id = mysql_escape_string($image_id);
+		if(isset($this->cache['images'][$image_id])){
+			return true;
+		}else{
 			$q_image = mysql_query('SELECT * FROM '.IMAGES_TABLE." WHERE id='$image_id'");
 			if(mysql_num_rows($q_image) > 0){
 				$image = mysql_fetch_array($q_image);
 				$this->cache['images'][$image_id] = $image;
-				return $image;
+				return true;
 			}else{
 				return false;
 			}
 		}
+	}
 	
+	// Gets the details of an image and saves them into the cache
+	function image_get($image_id){
+		$image_id = mysql_escape_string($image_id);
+		if($this->image_exist($image_id)){
+			return $this->cache['images'][$image_id];
+		}else{
+			return false;
+		}
+	
+	}
+	
+	// Gets the caption of an image
+	function image_get_caption($image_id){
+		$image_id = mysql_escape_string($image_id);
+		if($this->image_exist($image_id)){
+			return $this->cache['images'][$image_id]['caption'];
+		}else{
+			return false;
+		}
 	}
 	
 	// Gets the small thumbnail URL
@@ -511,7 +560,8 @@ class PhotoBlog{
 		$image = $this->image_get($image_id);
 		$gallery_id = $image['gallery_id'];
 		$this->gallery_exist($gallery_id);
-		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
+		$gallery_name = $this->post_string_for_permalink($this->gallery_get_name($gallery_id));
+		$image_name = $this->post_string_for_permalink($this->image_get_caption($image_id));
 		return $this->site_url.'thumbnails/'.$image_id.'/'.$gallery_name.'/small/'.$image_name.'.'.$image['filetype'];
 	}
 	
@@ -520,8 +570,8 @@ class PhotoBlog{
 		$image = $this->image_get($image_id);
 		$gallery_id = $image['gallery_id'];
 		$this->gallery_exist($gallery_id);
-		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
-		$image_name = $this->post_string_for_permalink($this->cache['images'][$image_id]['caption']);
+		$gallery_name = $this->post_string_for_permalink($this->gallery_get_name($gallery_id));
+		$image_name = $this->post_string_for_permalink($this->image_get_caption($image_id));
 		return $this->site_url.'thumbnails/'.$image_id.'/'.$gallery_name.'/big/'.$image_name.'.'.$image['filetype'];
 	}
 	
@@ -530,8 +580,8 @@ class PhotoBlog{
 		$image = $this->image_get($image_id);
 		$gallery_id = $image['gallery_id'];
 		$this->gallery_exist($gallery_id);
-		$gallery_name = $this->post_string_for_permalink($this->cache['galleries'][$gallery_id]['name']);
-		$image_name = $this->post_string_for_permalink($image['caption']);
+		$gallery_name = $this->post_string_for_permalink($this->gallery_get_name($gallery_id));
+		$image_name = $this->post_string_for_permalink($this->image_get_caption($image_id));
 		return $this->site_url.'image-big/'.$image_id.'/'.$gallery_name.'/'.$image_name.'/';
 	}
 }
