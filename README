@@ -1,0 +1,15 @@
+PhotoBlog - A PHP-MySQL photoblogging platform
+----------------------------------------------
+Author: Luca Zorzi <luca@tuttoeniente.net>
+License: BSD
+Website: http://lucatnt.github.com/PhotoBlog
+
+
+1. REQUIREMENTS
+ - A web server
+ - PHP
+ - MySQL
+
+2. INSTALL INSTRUCTIONS
+Unpack the tarball in any directory served by your webserver and visit it with
+your preferred browser, then follow the instructions that appear on the screen.
