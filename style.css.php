@@ -5,8 +5,9 @@
 *
 *  Author: Luca Zorzi <luca AT tuttoeniente DOT net>
 *
-*  PhotoBlog is free software, and it is released under the GNU/GPL license version 2 or above
+*  PhotoBlog is released under the BSD license
 */
+
 // Define some needed constants
 define('_IN_PHOTOBLOG_', true);
 define('BASEPATH', str_replace('/style.css.php', '', __FILE__));
