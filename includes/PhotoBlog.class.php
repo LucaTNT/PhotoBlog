@@ -5,7 +5,7 @@
 *
 *  Author: Luca Zorzi <luca AT tuttoeniente DOT net>
 *
-*  PhotoBlog is free software, and it is released under the GNU/GPL license version 2 or above
+*  PhotoBlog is released under the BSD license
 */
 
 // Die if called directly
