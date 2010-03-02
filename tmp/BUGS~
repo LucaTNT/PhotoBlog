@@ -1,5 +1,0 @@
-BUG:
-----------
-* PRIORITY: high;
-  Lightview doesn't extend its grey box on the whole page, but only on the part shown browser at loading. Same issue with FF, Konqueror and Chrome
-----------
