@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.19, created on 2010-03-02 12:58:12
+<?php /* Smarty version 2.6.19, created on 2010-03-02 13:53:06
          compiled from /var/www/PhotoBlog/templates/default/footer.tpl */ ?>
   </div>
   <div id="footer">

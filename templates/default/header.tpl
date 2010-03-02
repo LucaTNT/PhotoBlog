@@ -14,7 +14,6 @@
   <script type="text/javascript" src="js/lightbox.js"></script>
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$PhotoBlog.rss_feed_url}" />
   <link rel='stylesheet' href='{$PhotoBlog.home_url}style.css.php' type='text/css' />
-  <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
  </head>
  <body>
   <div id="container">

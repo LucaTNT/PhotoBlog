@@ -10,7 +10,7 @@
 {section name=k loop=$images}
  {if $images[k].gallery_cover == 0}
   {if $lightbox == 1}
-   <a href="{$images[k].image_link}" rel="lightbox[{$images[k].gallery_id}]" title="{$images[k].caption}">
+   <a href="{$images[k].image_link}" rel="lightbox[{$images[k].gallery_id}]" title="{$images[k].caption}" id="deviscrivermi">
   {else}
    <a href="{$images[k].image_link}">
   {/if}

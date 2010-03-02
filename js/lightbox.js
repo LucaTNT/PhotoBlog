@@ -160,7 +160,8 @@ Lightbox.prototype = {
                 Builder.node('div',{id:'imageData'}, [
                     Builder.node('div',{id:'imageDetails'}, [
                         Builder.node('span',{id:'caption'}),
-                        Builder.node('span',{id:'numberDisplay'})
+                        Builder.node('span',{id:'numberDisplay'}),
+			Builder.node('span',{id:'commentLink'}) // Added by PhotoBlog
                     ]),
                     Builder.node('div',{id:'bottomNav'},
                         Builder.node('a',{id:'bottomNavClose', href: '#' },
@@ -184,7 +185,8 @@ Lightbox.prototype = {
         (function(){
             var ids = 
                 'overlay lightbox outerImageContainer imageContainer lightboxImage hoverNav prevLink nextLink loading loadingLink ' + 
-                'imageDataContainer imageData imageDetails caption numberDisplay bottomNav bottomNavClose';   
+                'imageDataContainer imageData imageDetails caption numberDisplay bottomNav bottomNavClose' +
+                ' commentLink';   // Added by PhotoBlog
             $w(ids).each(function(id){ th[id] = $(id); });
         }).defer();
     },
@@ -225,12 +227,14 @@ Lightbox.prototype = {
 
         if ((imageLink.rel == 'lightbox')){
             // if image is NOT part of a set, add single image to imageArray
-            this.imageArray.push([imageLink.href, imageLink.title]);         
+            //this.imageArray.push([imageLink.href, imageLink.title]);         
+            this.imageArray.push([imageLink.href, imageLink.title, 'sonofenomeno']); // Added by PhotoBlog        
         } else {
             // if image is part of a set..
             this.imageArray = 
                 $$(imageLink.tagName + '[href][rel="' + imageLink.rel + '"]').
-                collect(function(anchor){ return [anchor.href, anchor.title]; }).
+                //collect(function(anchor){ return [anchor.href, anchor.title]; }).
+                collect(function(anchor){ return [anchor.href, anchor.title, 'sonofenomeno']; }).// Added by PhotoBlog
                 uniq();
             
             while (this.imageArray[imageNum][0] != imageLink.href) { imageNum++; }
@@ -375,6 +379,11 @@ Lightbox.prototype = {
     //
     updateDetails: function() {
         this.caption.update(this.imageArray[this.activeImage][1] ? this.imageArray[this.activeImage][1] : "").show();
+        
+        re = new RegExp('(.*)\/image\-big\/([0-9]+)\/(.*)'); // Added by PhotoBlog
+        image_id = this.imageArray[this.activeImage][0].replace(re, "$2"); // Added by PhotoBlog
+        html_link = '<a href="javascript:Lightbox.prototype.end();">clic</a>'; // Added by PhotoBlog
+        this.commentLink.update(true ? html_link : "").show(); // Added by PhotoBlog
 
         // if image is part of set display 'Image x of x' 
         if (this.imageArray.length > 1){

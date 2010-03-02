@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.19, created on 2010-03-02 12:58:12
+<?php /* Smarty version 2.6.19, created on 2010-03-02 14:15:01
          compiled from gallery_for_index.tpl */ ?>
 <p>
 <?php if ($this->_tpl_vars['lightbox'] == 1): ?>
@@ -43,7 +43,7 @@ $this->_sections['k']['last']       = ($this->_sections['k']['iteration'] == $th
    <a href="<?php echo $this->_tpl_vars['images'][$this->_sections['k']['index']]['image_link']; ?>
 " rel="lightbox[<?php echo $this->_tpl_vars['images'][$this->_sections['k']['index']]['gallery_id']; ?>
 ]" title="<?php echo $this->_tpl_vars['images'][$this->_sections['k']['index']]['caption']; ?>
-">
+" id="deviscrivermi">
   <?php else: ?>
    <a href="<?php echo $this->_tpl_vars['images'][$this->_sections['k']['index']]['image_link']; ?>
 ">

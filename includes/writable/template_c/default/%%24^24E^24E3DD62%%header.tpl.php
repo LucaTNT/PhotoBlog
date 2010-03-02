@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.19, created on 2010-03-02 12:58:12
+<?php /* Smarty version 2.6.19, created on 2010-03-02 14:07:02
          compiled from /var/www/PhotoBlog/templates/default/header.tpl */ ?>
 <?php echo '<?xml'; ?>
  version='1.0' encoding='<?php echo $this->_tpl_vars['page']['encoding']; ?>
@@ -26,7 +26,6 @@
 " />
   <link rel='stylesheet' href='<?php echo $this->_tpl_vars['PhotoBlog']['home_url']; ?>
 style.css.php' type='text/css' />
-  <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
  </head>
  <body>
   <div id="container">

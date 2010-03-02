@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.19, created on 2010-03-02 12:58:12
+<?php /* Smarty version 2.6.19, created on 2010-03-02 14:07:02
          compiled from style.css.tpl */ ?>
 <?php echo '
 /*
@@ -74,6 +74,7 @@ a:hover{color:#6A7CA0;text-decoration: underline; border: none;}
 
 #container {
 	width: 90%;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding: 0px;
 	background:#fff;
@@ -474,14 +475,15 @@ cite a{color: #000; text-decoration: none; border-bottom: 1px dotted #465D71;}
 /* footer */
 
 #footer {
-	background: #333;
-	clear: both;
 	width: 90%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0px;
 	margin-top: 10px;
 	border-top: solid 2px #FFFFFF;
 	font-family: verdana, arial, tahoma;
 	font-size: 7pt;
-	margin-left: 5%;
+	background: #333;
 }
 	
 #footer p{padding:6px;margin: 0; color: #eee;}
